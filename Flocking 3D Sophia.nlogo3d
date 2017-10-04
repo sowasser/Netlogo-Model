@@ -1,6 +1,6 @@
 turtles-own [
-  flockmates         ;; agentset of nearby turtles
-  nearest-neighbor   ;; closest one of our flockmates
+  shoalmates         ;; agentset of nearby turtles
+  nearest-neighbor   ;; closest one of our shoalmates
 ]
 
 globals [ scale ]
@@ -16,14 +16,14 @@ to setup
       right random-float 360
       tilt-up asin (1.0 - random-float 2.0)
       roll-right random-float 360
-      set flockmates no-turtles ]
+      set shoalmates no-turtles ]
   ask turtle 0 [ set color red ]
   reset-ticks
 end
 
 to go
   ask turtles
-    [ flock ]
+    [ shoal ]
   repeat 5
   [
     ask turtles
@@ -35,9 +35,9 @@ to go
   tick
 end
 
-to flock  ;; turtle procedure
-  find-flockmates
-  if any? flockmates
+to shoal  ;; turtle procedure
+  find-shoalmates
+  if any? shoalmates
     [ find-nearest-neighbor
       ifelse distance nearest-neighbor < ( minimum-separation * scale )
         [ separate ]
@@ -45,12 +45,12 @@ to flock  ;; turtle procedure
           cohere ] ]
 end
 
-to find-flockmates  ;; turtle procedure
-  set flockmates other turtles in-radius (vision * scale)
+to find-shoalmates  ;; turtle procedure
+  set shoalmates other turtles in-radius (vision * scale)
 end
 
 to find-nearest-neighbor ;; turtle procedure
-  set nearest-neighbor min-one-of flockmates [distance myself]
+  set nearest-neighbor min-one-of shoalmates [distance myself]
 end
 
 ;;; SEPARATE
@@ -63,43 +63,43 @@ end
 ;;; ALIGN
 
 to align  ;; turtle procedure
-  turn-towards average-flockmate-heading max-align-turn
-  pitch-towards average-flockmate-pitch max-align-turn
+  turn-towards average-shoalmate-heading max-align-turn
+  pitch-towards average-shoalmate-pitch max-align-turn
 end
 
-to-report average-flockmate-heading  ;; turtle procedure
+to-report average-shoalmate-heading  ;; turtle procedure
   ;; We can't just average the heading variables here.
   ;; For example, the average of 1 and 359 should be 0,
   ;; not 180.  So we have to use trigonometry.
-  report atan sum [sin heading] of flockmates
-              sum [cos heading] of flockmates
+  report atan sum [sin heading] of shoalmates
+              sum [cos heading] of shoalmates
 end
 
-to-report average-flockmate-pitch  ;; turtle procedure
+to-report average-shoalmate-pitch  ;; turtle procedure
   ;; We can't just average the heading variables here.
   ;; For example, the average of 1 and 359 should be 0,
   ;; not 180.  So we have to use trigonometry.
-  report atan sum [sin pitch] of flockmates
-              sum [cos pitch] of flockmates
+  report atan sum [sin pitch] of shoalmates
+              sum [cos pitch] of shoalmates
 end
 
 ;;; COHERE
 
 to cohere  ;; turtle procedure
-  turn-towards average-heading-towards-flockmates max-cohere-turn
-  pitch-towards average-pitch-towards-flockmates max-cohere-turn
+  turn-towards average-heading-towards-shoalmates max-cohere-turn
+  pitch-towards average-pitch-towards-shoalmates max-cohere-turn
 end
 
-to-report average-heading-towards-flockmates  ;; turtle procedure
+to-report average-heading-towards-shoalmates  ;; turtle procedure
   ;; "towards myself" gives us the heading from the other turtle
   ;; to me, but we want the heading from me to the other turtle,
   ;; so we add 180
-  report atan mean [sin (towards myself + 180)] of flockmates
-              mean [cos (towards myself + 180)] of flockmates
+  report atan mean [sin (towards myself + 180)] of shoalmates
+              mean [cos (towards myself + 180)] of shoalmates
 end
 
-to-report average-pitch-towards-flockmates  ;; turtle procedure
-  report mean [0 - (towards-pitch myself)] of flockmates
+to-report average-pitch-towards-shoalmates  ;; turtle procedure
+  report mean [0 - (towards-pitch myself)] of shoalmates
 end
 
 ;;; HELPER PROCEDURES
@@ -214,7 +214,7 @@ population
 population
 0
 200
-200.0
+7.0
 1
 1
 NIL
@@ -366,59 +366,59 @@ NIL
 @#$#@#$#@
 ## WHAT IS IT?
 
-This is a 3D version of the Flocking model in the NetLogo Models Library. This model is an attempt to mimic the flocking of birds.  (The resulting motion also resembles schools of fish.)  The flocks that appear in this model are not created or led in any way by special leader birds.  Rather, each bird is following exactly the same set of rules, from which flocks emerge.
+This is a 3D version of the Flocking model in the NetLogo Models Library. This model is an attempt to mimic the flocking of fish.  (The resulting motion also resembles schools of fish.)  The flocks that appear in this model are not created or led in any way by special leader fish.  Rather, each fish is following exactly the same set of rules, from which flocks emerge.
 
-The birds follow three rules: "alignment", "separation", and "cohesion".  "Alignment" means that a bird tends to turn so that it is moving in the same direction that nearby birds are moving.  "Separation" means that a bird will turn to avoid another bird which gets too close.  "Cohesion" means that a bird will move towards other nearby birds (unless another bird is too close).  When two birds are too close, the "separation" rule overrides the other two, which are deactivated until the minimum separation is achieved.
+The fish follow three rules: "alignment", "separation", and "cohesion".  "Alignment" means that a fish tends to turn so that it is moving in the same direction that nearby fish are moving.  "Separation" means that a fish will turn to avoid another fish which gets too close.  "Cohesion" means that a fish will move towards other nearby fish (unless another fish is too close).  When two fish are too close, the "separation" rule overrides the other two, which are deactivated until the minimum separation is achieved.
 
-The three rules affect only the bird's heading.  Each bird always moves forward at the same constant speed.
+The three rules affect only the fish's heading.  Each fish always moves forward at the same constant speed.
 
 ## HOW TO USE IT
 
-First, determine the number of birds you want in the simulation and set the POPULATION slider to that value.  Press SETUP to create the birds, and press GO to have them start flying around.
+First, determine the number of fish you want in the simulation and set the POPULATION slider to that value.  Press SETUP to create the fish, and press GO to have them start flying around.
 
 The default settings for the sliders will produce reasonably good flocking behavior.  However, you can play with them to get variations:
 
-The three turn sliders (MAX-COHERE-TURN, MAX-ALIGN-TURN, and MAX-SEPARATE-TURN) control the maximum angle a bird can turn as a result of each rule.
+The three turn sliders (MAX-COHERE-TURN, MAX-ALIGN-TURN, and MAX-SEPARATE-TURN) control the maximum angle a fish can turn as a result of each rule.
 
-VISION is the distance that each bird can see 360 degrees around it.
+VISION is the distance that each fish can see 360 degrees around it.
 
-FOLLOW BIG FLOCK and WATCH BIG FLOCK - select a random bird with the maximum number of FLOCKMATES and follows or watches appropriately.
+FOLLOW BIG FLOCK and WATCH BIG FLOCK - select a random fish with the maximum number of FLOCKMATES and follows or watches appropriately.
 
 ## THINGS TO NOTICE
 
 Central to the model is the observation that flocks form without a leader.
 
-There are no random numbers used in this model, except to position the birds initially.  The fluid, lifelike behavior of the birds is produced entirely by deterministic rules.
+There are no random numbers used in this model, except to position the fish initially.  The fluid, lifelike behavior of the fish is produced entirely by deterministic rules.
 
 Also, notice that each flock is dynamic.  A flock, once together, is not guaranteed to keep all of its members.  Why do you think this is?
 
-After running the model for a while, all of the birds have approximately the same heading.  Why?
+After running the model for a while, all of the fish have approximately the same heading.  Why?
 
-Sometimes a bird breaks away from its flock.  How does this happen?  You may need to slow down the model or run it step by step in order to observe this phenomenon.
+Sometimes a fish breaks away from its flock.  How does this happen?  You may need to slow down the model or run it step by step in order to observe this phenomenon.
 
 ## THINGS TO TRY
 
-Play with the sliders to see if you can get tighter flocks, looser flocks, fewer flocks, more flocks, more or less splitting and joining of flocks, more or less rearranging of birds within flocks, etc.
+Play with the sliders to see if you can get tighter flocks, looser flocks, fewer flocks, more flocks, more or less splitting and joining of flocks, more or less rearranging of fish within flocks, etc.
 
 You can turn off a rule entirely by setting that rule's angle slider to zero.  Is one rule by itself enough to produce at least some flocking?  What about two rules?  What's missing from the resulting behavior when you leave out each rule?
 
-Will running the model for a long time produce a static flock?  Or will the birds never settle down to an unchanging formation?  Remember, there are no random numbers used in this model.
+Will running the model for a long time produce a static flock?  Or will the fish never settle down to an unchanging formation?  Remember, there are no random numbers used in this model.
 
 ## EXTENDING THE MODEL
 
-Currently the birds can "see" all around them.  What happens if birds can only see in front of them?  The `in-cone` primitive can be used for this.
+Currently the fish can "see" all around them.  What happens if fish can only see in front of them?  The `in-cone` primitive can be used for this.
 
 Is there some way to get V-shaped flocks, like migrating geese?
 
-What happens if you put walls around the edges of the world that the birds can't fly into?
+What happens if you put walls around the edges of the world that the fish can't fly into?
 
-Can you get the birds to fly around obstacles in the middle of the world?
+Can you get the fish to fly around obstacles in the middle of the world?
 
-In this model, the birds turn left or right (change in yaw) without rolling.  Real birds bank when they turn.  Can you change the basic rules of the model so that the flocking behavior results from banking?
+In this model, the fish turn left or right (change in yaw) without rolling.  Real fish bank when they turn.  Can you change the basic rules of the model so that the flocking behavior results from banking?
 
-What would happen if you gave the birds different velocities?  For example, you could make birds that are not near other birds fly faster to catch up to the flock.  Or, you could simulate the diminished air resistance that birds experience when flying together by making them fly faster when in a group.
+What would happen if you gave the fish different velocities?  For example, you could make fish that are not near other fish fly faster to catch up to the flock.  Or, you could simulate the diminished air resistance that fish experience when flying together by making them fly faster when in a group.
 
-Are there other interesting ways you can make the birds different from each other?  There could be random variation in the population, or you could have distinct "species" of bird.
+Are there other interesting ways you can make the fish different from each other?  There could be random variation in the population, or you could have distinct "species" of fish.
 
 ## NETLOGO FEATURES
 
