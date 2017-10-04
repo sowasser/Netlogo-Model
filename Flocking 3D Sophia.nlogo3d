@@ -7,7 +7,7 @@ globals [ scale ]
 
 to setup
   clear-all
-  set scale 0.25 ;; scale let's us have a bigger world without too many patches
+  set scale 0.25 ;; scale lets us have a bigger world without too many patches
   create-turtles population
     [ set color yellow - 2 + random 7  ;; random shades look nice
       setxyz random-xcor
@@ -334,8 +334,8 @@ BUTTON
 168
 141
 201
-follow big flock
-follow one-of turtles with-max [ count flockmates ]
+follow big shoal
+follow one-of turtles with-max [ count shoalmates ]
 NIL
 1
 T
@@ -351,8 +351,8 @@ BUTTON
 168
 271
 201
-watch big flock
-watch one-of turtles with-max [ count flockmates ]
+watch big shoal
+watch one-of turtles with-max [ count shoalmates ]
 NIL
 1
 T
