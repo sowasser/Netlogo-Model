@@ -9,7 +9,7 @@ to setup
   clear-all
   set scale 0.25 ;; scale lets us have a bigger world without too many patches
   create-turtles population
-    [ set color yellow - 2 + random 7  ;; random shades look nice
+    [ set color cyan - 2 + random 7  ;; random shades look nice
       setxyz random-xcor
              random-ycor
              random-zcor
