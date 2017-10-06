@@ -1,4 +1,4 @@
-# Netlogo-Model
+# shoal-model-in-netlogo
 Collective behaviour model in [NetLogo][netlogo], adapted from their [Flocking 3D][flock] model.
 
 
