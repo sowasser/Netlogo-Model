@@ -82,6 +82,19 @@ to-report average-heading-towards-shoalmates  ;; turtle procedure
     [ report atan x-component y-component ]
 end
 
+;;; AVOID WALLS
+;; in this version, the world is bounded, non toroidal. In the
+;; original model, the agents got 'stuck' on the walls in this
+;; state. Therefore, a function is needed to return a vector away
+;; from the wall when encountered.
+to avoid-wall  ;; turtle procedure
+  ;; need to se maximum x, y coordinates, or some other way to
+  ;; determine where the walls are, then turn away
+  if
+
+end
+
+
 ;;; HELPER PROCEDURES
 
 to turn-towards [new-heading max-turn]  ;; turtle procedure
